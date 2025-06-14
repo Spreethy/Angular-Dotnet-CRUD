@@ -1,0 +1,37 @@
+<div class="container mt-5" *ngIf="course">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h3 class="mb-0">Course Details</h3>
+        </div>
+
+        <div class="card-body">
+          <ul class="list-group mb-4">
+            <li class="list-group-item">
+              <strong>Course ID:</strong> {{ course.courseId }}
+            </li>
+            <li class="list-group-item">
+              <strong>Course Name:</strong> {{ course.courseName }}
+            </li>
+            <li class="list-group-item">
+              <strong>Credits:</strong> {{ course.credits }}
+            </li>
+          </ul>
+
+          <h5 class="text-primary">Students Enrolled ({{ course.studentCount || 0 }})</h5>
+
+          <ul class="list-group" *ngIf="course.studentIds?.length">
+            <li class="list-group-item" *ngFor="let id of course.studentIds">
+              <i class="bi bi-person me-2 text-primary"></i>{{ id }}
+            </li>
+          </ul>
+
+          <div *ngIf="!course.studentIds?.length" class="alert alert-warning mt-3">
+            No students enrolled
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

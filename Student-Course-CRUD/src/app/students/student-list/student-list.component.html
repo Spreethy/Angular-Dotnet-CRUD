@@ -1,0 +1,35 @@
+
+<div class="container mt-3">
+  <h1 class="text-center ">Student List</h1>
+<div class="mb-2" style="text-align: right;">
+    <a class="btn btn-primary" routerLink="/students/add">+ Add Student</a>
+  </div>
+  <br/>
+<table class="table table-bordered">
+  <thead>
+    <tr class="table-primary">
+      <th >ID</th>
+      <th>Name</th>
+      <th>Email</th>
+      <th>Address</th>
+      <th>Courses</th>
+      <th class="text-center">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let s of students">
+      <td>{{ s.studentId }}</td>
+      <td>{{ s.name }}</td>
+      <td>{{ s.email }}</td>
+      <td>{{ s.address }}</td>
+      <td> {{ getCourseNames(s) }}</td>
+      <td class="text-center">
+        <button class="btn btn-info btn-sm me-2" (click)="view(s.studentId)">View</button>
+        <button class="btn btn-warning btn-sm me-2" (click)="edit(s.studentId)">Edit</button>
+        <button class="btn btn-danger btn-sm" (click)="deleteStudent(s.studentId)">Delete</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+</div>
+

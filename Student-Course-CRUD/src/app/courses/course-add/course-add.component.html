@@ -1,0 +1,51 @@
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">Add Course</h4>
+        </div>
+
+        <div class="card-body">
+          <form (ngSubmit)="save()" #form="ngForm" novalidata>
+            <div class="mb-3">
+              <label class="form-label">Course Name</label>
+              <input
+                class="form-control"
+                [(ngModel)]="course.courseName"
+                name="courseName"
+                required
+                #courseName="ngModel"
+              />
+              <div *ngIf="courseName.invalid && (courseName.dirty || courseName.touched)" class="text-danger mt-1">
+                Course Name is required.
+              </div>
+            </div>
+
+            <div *ngIf="errorMessage" class="alert alert-danger"> {{ errorMessage }}</div>
+
+            <div class="mb-3">
+                  <label class="form-label">Credits</label>
+                  <input
+                    type="number"
+                    class="form-control"
+                    [(ngModel)]="course.credits"
+                    name="credits"
+                    required
+                    #credits="ngModel"
+                    min="1"
+                  />
+              <div *ngIf="credits.invalid && (credits.dirty || credits.touched)" class="text-danger mt-1">
+                <div *ngIf="credits.errors?.required">Credits is required.</div>
+                <div *ngIf="credits.errors?.min">Credits must be at least 1.</div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success" [disabled]="form.invalid">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

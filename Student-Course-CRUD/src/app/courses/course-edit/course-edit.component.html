@@ -1,0 +1,49 @@
+
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">Edit Course</h4>
+        </div>
+
+        <div class="card-body">
+          <form *ngIf="course" (ngSubmit)="update()" #form="ngForm">
+            <div class="mb-3">
+              <label class="form-label">Course Name</label>
+              <input
+                class="form-control"
+                [(ngModel)]="course.courseName"
+                name="courseName"
+                required
+                #courseName="ngModel"
+              />
+              <div *ngIf="courseName.invalid && (courseName.dirty || courseName.touched)" class="text-danger mt-1">
+                Course Name is required.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Credits</label>
+              <input
+                type="number"
+                class="form-control"
+                [(ngModel)]="course.credits"
+                name="credits"
+                required
+                min="1"
+                #credits="ngModel"
+              />
+              <div *ngIf="credits.invalid && (credits.dirty || credits.touched)" class="text-danger mt-1">
+                <div *ngIf="credits.errors?.required">Credits is required.</div>
+                <div *ngIf="credits.errors?.min">Credits must be at least 1.</div>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-success mt-3" [disabled]="form.invalid">Update</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

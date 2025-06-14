@@ -1,0 +1,83 @@
+<div class="container mt-5">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card shadow-sm">
+        <div class="card-header bg-success text-white">
+          <h4 class="mb-0">Add Student</h4>
+        </div>
+
+        <div class="card-body">
+          <form #studentForm="ngForm" (ngSubmit)="save(studentForm)" novalidate>
+            <div class="mb-3">
+              <label class="form-label">Name</label>
+              <input class="form-control" [(ngModel)]="student.Name" name="name" pattern="^[a-zA-Z\s'-]+$" required #name="ngModel"/>
+              <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger mt-1">
+                <small *ngIf="name.errors?.required">Name is required.</small>
+                <small *ngIf="name.errors?.pattern">Name cannot contain numbers or special characters.</small>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Email</label>
+              <input class="form-control" [(ngModel)]="student.Email" name="email" pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required email #email="ngModel"/>
+              <div *ngIf="email.invalid && (email.dirty || email.touched)" class="text-danger mt-1">
+                <small *ngIf="email.errors?.required">Email is required.</small>
+                 <small *ngIf="email.errors?.pattern">Enter a valid email address</small>
+              </div>
+            </div>
+
+            <div *ngIf="errorMessage" class="alert alert-danger">
+              {{ errorMessage }}
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Date of Birth</label>
+              <input type="date" class="form-control" [(ngModel)]="student.DateofBirth" name="dob" required />
+            </div>
+
+           <div class="mb-3">
+            <label class="form-label">Address</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              [(ngModel)]="student.Address" 
+              name="address" 
+              required 
+              #address="ngModel"
+            />
+            <div *ngIf="address.invalid && (address.dirty || address.touched)" class="text-danger mt-1">
+              <small *ngIf="address.errors?.required">Address is required</small>
+            </div>
+          </div>
+
+
+            <div class="mb-3">
+              <label class="form-label">Phone Number</label>
+              <input class="form-control" [(ngModel)]="student.PhoneNumber" name="phone" required pattern="^[0-9]{10,15}$" #phone="ngModel"/>
+              <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger mt-1">
+                <small *ngIf="phone.errors?.required">Phone number is required</small>
+                <small *ngIf="phone.errors?.pattern">Enter a valid phone number (10-15 digits).</small>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label class="form-label">Assign Courses</label>
+              <div *ngFor="let course of courses" class="form-check">
+                <input
+                  type="checkbox"
+                  class="form-check-input"
+                  [checked]="student.AssignedCourseIds.includes(course.courseId)"
+                  (change)="onCourseChange(course.courseId, $event.target.checked)"
+                  id="course-{{ course.courseId }}"
+                />
+                <label class="form-check-label" for="course-{{ course.courseId }}">{{ course.courseName }}</label>
+              </div>
+            </div>
+
+              <button type="submit" [disabled]="studentForm.invalid" class="btn btn-success">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

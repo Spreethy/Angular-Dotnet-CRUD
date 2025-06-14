@@ -1,0 +1,40 @@
+import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { CourseService } from 'src/app/services/course.service';
+
+@Component({
+  selector: 'app-course-add',
+  templateUrl: './course-add.component.html'
+})
+export class CourseAddComponent {
+  course: any = {
+    courseName: '',
+    credits: 0
+  };
+  errorMessage: string ='';
+  constructor(private courseService: CourseService, private router: Router) {}
+
+  
+  save() {
+  this.errorMessage = '';
+
+  if (this.course.credits < 1) {
+    this.errorMessage = 'Credits must be at least 1.';
+    return;  
+  }
+
+  this.courseService.addCourse(this.course).subscribe({
+    next: () => {
+      this.router.navigate(['/courses']);
+    },
+    error: (err) => {
+      if (err.status === 400) {
+        this.errorMessage = 'A course with this name already exists';
+      } else {
+        this.errorMessage = 'An unexpected error occurred. Please try again';
+      }
+    }
+  });
+}
+
+}
