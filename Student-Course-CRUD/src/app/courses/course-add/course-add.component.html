@@ -11,31 +11,18 @@
           <form (ngSubmit)="save()" #form="ngForm" novalidata>
             <div class="mb-3">
               <label class="form-label">Course Name</label>
-              <input
-                class="form-control"
-                [(ngModel)]="course.courseName"
-                name="courseName"
-                required
-                #courseName="ngModel"
-              />
+              <input class="form-control" [(ngModel)]="course.courseName" name="courseName" required #courseName="ngModel"/>
               <div *ngIf="courseName.invalid && (courseName.dirty || courseName.touched)" class="text-danger mt-1">
                 Course Name is required.
               </div>
             </div>
 
-            <div *ngIf="errorMessage" class="alert alert-danger"> {{ errorMessage }}</div>
+            <div *ngIf="errorMessage" class="text-danger mt-2"> {{ errorMessage }}</div>
+            
 
             <div class="mb-3">
                   <label class="form-label">Credits</label>
-                  <input
-                    type="number"
-                    class="form-control"
-                    [(ngModel)]="course.credits"
-                    name="credits"
-                    required
-                    #credits="ngModel"
-                    min="1"
-                  />
+                  <input type="number" class="form-control" [(ngModel)]="course.credits" name="credits" required #credits="ngModel" min="1"/>
               <div *ngIf="credits.invalid && (credits.dirty || credits.touched)" class="text-danger mt-1">
                 <div *ngIf="credits.errors?.required">Credits is required.</div>
                 <div *ngIf="credits.errors?.min">Credits must be at least 1.</div>

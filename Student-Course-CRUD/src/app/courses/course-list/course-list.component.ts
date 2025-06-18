@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { CourseService } from 'src/app/services/course.service';
 import { Router } from '@angular/router';
 import { StudentService, Student } from 'src/app/services/student.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-course-list',
@@ -11,9 +12,20 @@ import { StudentService, Student } from 'src/app/services/student.service';
 export class CourseListComponent implements OnInit {
   courses: any[] = [];
   students: Student[] = [];
+  filteredCourses: any[] =[];
+
+  searchName: string = '';
+  searchId: string = '';
+
+  courseToDelete: any = null;
+
+  modalInstance: any = null;
+
+
 
   
   constructor(
+    private toastr: ToastrService,
     private courseService: CourseService,
     private studentService: StudentService,
     private router: Router
@@ -21,6 +33,11 @@ export class CourseListComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadData();
+
+    const modalElement = document.getElementById('confirmDeleteModal');
+    if(modalElement){
+      this.modalInstance = new (window as any).bootstrap.Modal(modalElement);
+    }
   }
 
 
@@ -30,6 +47,7 @@ export class CourseListComponent implements OnInit {
 
       this.courseService.getCourses().subscribe(courses => {
         this.courses = courses;
+        this.filteredCourses = courses;
         console.log('Courses:', this.courses);
         console.log('Students:', this.students);
       });
@@ -42,41 +60,55 @@ export class CourseListComponent implements OnInit {
     ).length;
   }
 
-  // deleteCourse(course: any) {
-  //   const id = course.courseId;
-  //   if (!id) {
-  //     console.error('deleteCourse called with undefined ID!');
-  //     return;
-  //   }
-  //   if (confirm('Are you sure to delete this course?')) {
-  //     this.courseService.deleteCourse(id).subscribe(() => {
-  //       this.loadData();
-  //     });
-  //   }
-  // }
+ applyFilter(){
+  const nameFilter = this.searchName.trim().toLowerCase();
+  const idFilter = this.searchId.trim().toLowerCase();
 
-  deleteCourse(course: any) {
-    const id = course?.courseId;
-    if (!id) {
-      console.error('deleteCourse called with invalid ID!');
-      return;
-    }
+  this.filteredCourses = this.courses.filter(course => {
+    const matchesName = !nameFilter || course.courseName.toLowerCase().includes(nameFilter);
+    const matchesId = !idFilter || course.courseId.toLowerCase().includes(idFilter);
+    return matchesName && matchesId;
+  })
+ }
 
-    if (confirm('Are you sure to delete this course?')) {
-      this.courseService.deleteCourse(id).subscribe({
-        next: () => {
-          this.loadData();
-        },
-        error: (error) => {
-          if (error.status === 409) {
-            alert('This course is assigned to students and cannot be deleted.');
-          } else {
-            alert('Error deleting course: ' + (error.error || error.message || error.statusText));
-          }
-        }
-      });
-    }
+ deleteCourse(course: any){
+  this.courseToDelete = course;
+
+  const modalElement = document.getElementById('confirmDeleteModal');
+  if(modalElement){
+    this.modalInstance = new (window as any).bootstrap.Modal(modalElement);
+    this.modalInstance?.show();
   }
+  
+
+
+  }
+
+ 
+
+confirmDelete() {
+  const id = this.courseToDelete?.courseId;
+  if (!id) return;
+
+  this.courseService.deleteCourse(id).subscribe({
+    next: () => {
+      this.modalInstance?.hide();
+      this.toastr.success('Course deleted successfully!', 'Success');
+      this.loadData();
+
+     
+    },
+    error: (error) => {
+      this.modalInstance?.hide();
+      if (error.status === 409) {
+        this.toastr.warning('This course is assigned to students and cannot be deleted.');
+      } else {
+        this.toastr.error('Error deleting course.', 'Error');
+      }
+    }
+  });
+}
+
 
   view(id: string) {
     if (!id) {

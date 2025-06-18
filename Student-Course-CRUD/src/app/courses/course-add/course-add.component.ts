@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { CourseService } from 'src/app/services/course.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-course-add',
@@ -12,14 +13,14 @@ export class CourseAddComponent {
     credits: 0
   };
   errorMessage: string ='';
-  constructor(private courseService: CourseService, private router: Router) {}
+  constructor(private toastr: ToastrService, private courseService: CourseService, private router: Router) {}
 
   
   save() {
   this.errorMessage = '';
 
   if (this.course.credits < 1) {
-    this.errorMessage = 'Credits must be at least 1.';
+    this.toastr.error('Credits must be at least 1.');
     return;  
   }
 
@@ -29,9 +30,9 @@ export class CourseAddComponent {
     },
     error: (err) => {
       if (err.status === 400) {
-        this.errorMessage = 'A course with this name already exists';
+        this.toastr.error('A course with this name already exists');
       } else {
-        this.errorMessage = 'An unexpected error occurred. Please try again';
+        this.toastr.error('An unexpected error occurred. Please try again');
       }
     }
   });

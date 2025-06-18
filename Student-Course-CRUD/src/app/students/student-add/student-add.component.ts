@@ -3,6 +3,7 @@ import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CourseService } from 'src/app/services/course.service';
 import { StudentService } from 'src/app/services/student.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-student-add',
@@ -15,12 +16,16 @@ export class StudentAddComponent {
     DateofBirth: '',
     PhoneNumber: '',
     Address:'',
-    AssignedCourseIds:[]
+    AssignedCourseIds:[],
+    
   };
 
   courses: any[] = [];
   errorMessage: string = '';
-  constructor(private studentService: StudentService,private courseService: CourseService, private router: Router,private route: ActivatedRoute) {}
+  
+  constructor(private studentService: StudentService,private courseService: CourseService,
+    private toastr: ToastrService,
+     private router: Router,private route: ActivatedRoute) {}
 
   ngOnInit(){
     this.loadCourses();
@@ -50,26 +55,13 @@ export class StudentAddComponent {
       }
     
     }
-  // save() {
-  //   this.errorMessage = '';
-  //   this.studentService.addStudent(this.student).subscribe({
-  //     next: () => {
-  //        this.router.navigate(['/students']);
-  //     },
-  //     error: (err) => {
-  //       if(err.status === 400){
-  //         this.errorMessage = 'A student with this email already exists';
-  //       } else{
-  //         this.errorMessage = 'An unexpected error occured. Please try again';
-  //       }
-  //     }
 
   save(form: NgForm) {
   this.errorMessage = '';
 
   if (form.invalid) {
     this.errorMessage = 'Please fill all required fields correctly.';
-    return; // stop submission
+    return; 
   }
 
   this.studentService.addStudent(this.student).subscribe({
@@ -78,15 +70,12 @@ export class StudentAddComponent {
     },
     error: (err) => {
       if (err.status === 400) {
-        this.errorMessage = 'A student with this email already exists';
+        this.toastr.error('A student with this email already exists');
       } else {
-        this.errorMessage = 'An unexpected error occurred. Please try again';
+        this.toastr.error('An unexpected error occurred. Please try again');
       }
     }
   });
 }
-
-     
-    
-  
+ 
 }

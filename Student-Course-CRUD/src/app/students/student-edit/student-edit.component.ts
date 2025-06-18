@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StudentService } from 'src/app/services/student.service';
 import { CourseService } from 'src/app/services/course.service'; 
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-student-edit',
@@ -15,8 +16,10 @@ export class StudentEditComponent implements OnInit {
   };
 
   courses: any[] = [];  
+  errorMessage: string = '';
 
   constructor(
+    private toastr: ToastrService,
     private route: ActivatedRoute,
     private studentService: StudentService,
     private courseService: CourseService,  
@@ -59,9 +62,20 @@ export class StudentEditComponent implements OnInit {
   }
 
   update() {
+    this.errorMessage = '';
      console.log('Sending student:', this.student);
-    this.studentService.updateStudent(this.id, this.student).subscribe(() => {
+    this.studentService.updateStudent(this.id, this.student).subscribe({
+      next: () => {
       this.router.navigate(['/students']);
+      },
+      error: (err) => {
+        if(err.error && typeof err.error === 'string'){
+          this.toastr.error( err.error);
+        }else{
+          this.toastr.error( 'An unexpected error occured.');
+        }
+        console.error('Updated error:', err);
+      }
     });
   }
 }

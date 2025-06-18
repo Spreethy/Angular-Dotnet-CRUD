@@ -11,14 +11,7 @@
           <form (ngSubmit)="update()" #studentForm="ngForm" >
           <div class="mb-3">
             <label class="form-label">Name</label>
-            <input
-              class="form-control"
-              [(ngModel)]="student.name"
-              name="name"
-              required
-              pattern="^[a-zA-Z\s'-]+$"
-              #name="ngModel"
-            />
+            <input class="form-control" [(ngModel)]="student.name" name="name" required pattern="^[a-zA-Z\s'-]+$" #name="ngModel"/>
             <div *ngIf="name.invalid && (name.dirty || name.touched)" class="text-danger mt-1">
               <small *ngIf="name.errors?.required">Name is required</small>
               <small *ngIf="name.errors?.pattern">Name cannot contain numbers or special characters.</small>
@@ -27,12 +20,7 @@
 
         <div class="mb-3">
           <label class="form-label">Email</label>
-          <input
-            class="form-control"
-            [(ngModel)]="student.email"
-            name="email"
-            required
-            pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+          <input class="form-control" [(ngModel)]="student.email" name="email" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
             email
             #email="ngModel"
           />
@@ -44,14 +32,7 @@
 
         <div class="mb-3">
           <label class="form-label">Date of Birth</label>
-          <input
-            type="date"
-            class="form-control"
-            [(ngModel)]="student.dateofBirth"
-            name="dob"
-            required
-            #dob="ngModel"
-          />
+          <input type="date" class="form-control" [(ngModel)]="student.dateofBirth"  name="dob" required #dob="ngModel"/>
           <div *ngIf="dob.invalid && (dob.dirty || dob.touched)" class="text-danger mt-1">
             <small *ngIf="dob.errors?.required">Date of Birth is required</small>
           </div>
@@ -59,13 +40,7 @@
 
         <div class="mb-3">
           <label class="form-label">Address</label>
-          <input
-            class="form-control"
-            [(ngModel)]="student.address"
-            name="address"
-            required
-            #address="ngModel"
-          />
+          <input class="form-control" [(ngModel)]="student.address" name="address" required #address="ngModel"/>
           <div *ngIf="address.invalid && (address.dirty || address.touched)" class="text-danger mt-1">
             <small *ngIf="address.errors?.required">Address is required</small>
           </div>
@@ -73,32 +48,24 @@
 
         <div class="mb-3">
           <label class="form-label">Phone Number</label>
-          <input
-            class="form-control"
-            [(ngModel)]="student.phoneNumber"
-            name="phone"
-            required
-            pattern="^[0-9]{10,15}$"
-            #phone="ngModel"
-          />
+          <input class="form-control" [(ngModel)]="student.phoneNumber" name="phone" required pattern="^[0-9]{10}$"  #phone="ngModel"/>
           <div *ngIf="phone.invalid && (phone.dirty || phone.touched)" class="text-danger mt-1">
             <small *ngIf="phone.errors?.required">Phone number is required</small>
-            <small *ngIf="phone.errors?.pattern">Enter a valid phone number (10-15 digits)</small>
+            <small *ngIf="phone.errors?.pattern">Enter a valid phone number (10 digits)</small>
           </div>
         </div>
 
+
+        <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
         <label class="form-label">Assign Courses</label>
         <div *ngFor="let course of courses" class="form-check">
-            <input
-              type="checkbox"
-              class="form-check-input"
+            <input type="checkbox" class="form-check-input"
               [checked]="student.assignedCourseIds?.includes(course.courseId.toString())"
               (change)="onCourseChange(course.courseId.toString(), $event.target.checked)"
               id="course-{{ course.courseId }}"
             />
-            <label class="form-check-label" for="course-{{ course.courseId }}">
-              {{ course.courseName }}
-            </label>
+            <label class="form-check-label" for="course-{{ course.courseId }}"> {{ course.courseName }} </label>
           </div>
 
 

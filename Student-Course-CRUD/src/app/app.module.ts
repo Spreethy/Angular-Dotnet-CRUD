@@ -16,6 +16,8 @@ import { CourseViewComponent } from './courses/course-view/course-view.component
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ToastrModule } from 'ngx-toastr';
+import {BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -29,16 +31,22 @@ import { RouterModule } from '@angular/router';
     CourseAddComponent,
     CourseEditComponent,
     StudentViewComponent,
-    CourseViewComponent
+    CourseViewComponent,
+   
   ],
   imports: [
+    
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
     CommonModule,
-    RouterModule
+    RouterModule,
+    ToastrModule.forRoot({
+      positionClass:'toast-center-center',
+    }),
+     BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

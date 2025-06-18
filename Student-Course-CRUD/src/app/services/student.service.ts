@@ -24,14 +24,14 @@ export class StudentService {
   constructor(private http: HttpClient) {}
 
 
-getStudents(): Observable<any[]> {
-  return this.http.get<any[]>(this.baseUrl);
-}
+  getStudents(): Observable<any[]> {
+    return this.http.get<any[]>(this.baseUrl);
+  }
 
 
-getStudent(id: string): Observable<any> {
-  return this.http.get(`${this.baseUrl}/${id}`);
-}
+  getStudent(id: string): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${id}`);
+  }
 
 
   addStudent(student: any): Observable<any> {
@@ -47,5 +47,7 @@ getStudent(id: string): Observable<any> {
   deleteStudent(id: string): Observable<any> {
   return this.http.delete(`${this.baseUrl}/${id}`);
   }
+
+  
  
 }

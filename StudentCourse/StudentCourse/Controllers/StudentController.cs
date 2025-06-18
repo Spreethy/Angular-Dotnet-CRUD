@@ -28,9 +28,7 @@ namespace StudentCourseCRUD.Controllers
                 s.DateofBirth,
                 s.PhoneNumber,
                 s.Address,
-                //assignedCourseIds = s.StudentCourses.Select(sc => sc.CourseId).ToList(),
-                assignedCourseIds = s.StudentCourses.Select(sc => sc.CourseId.ToString()).ToList(),
-
+                assignedCourseIds = s.StudentCourses.Select(sc => sc.CourseId).ToList(),
                 Courses = s.StudentCourses.Select(sc => new
                 {
                     sc.Course.CourseId,
@@ -61,7 +59,7 @@ namespace StudentCourseCRUD.Controllers
                 student.DateofBirth,
                 student.PhoneNumber,
                 student.Address,
-                assignedCourseIds = student.StudentCourses.Select(sc => sc.CourseId.ToString()).ToList(),
+                assignedCourseIds = student.StudentCourses.Select(sc => sc.CourseId).ToList(),
 
                 Courses = student.StudentCourses.Select(sc => new
                 {
@@ -118,6 +116,14 @@ namespace StudentCourseCRUD.Controllers
         {
             var student = db.Students.Find(id);
             if (student == null) return NotFound();
+
+            if (db.Students.Any(s => s.Email == updatedStudent.Email && s.StudentId != id))
+            {
+                return BadRequest("Another student with this email already exists.");
+            }
+
+
+
 
             student.Name = updatedStudent.Name;
             student.Email = updatedStudent.Email;
